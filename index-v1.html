@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+
+  <title>Mellodia da Voz — Aprimoramento vocal para oradores, podcasters e artistas</title>
+  <meta name="description" content="Domine a sua voz. Método de aprimoramento vocal para quem usa a fala como ativo: oradores, podcasters e artistas. Técnica, projeção, presença." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Mellodia da Voz — Sua voz é seu ativo. Trate-a como tal." />
+  <meta property="og:description" content="Método de aprimoramento vocal para oradores, podcasters e artistas. Técnica, projeção, saúde vocal e presença." />
+  <meta property="og:image" content="assets/images/og-image.png" />
+  <meta property="og:type" content="website" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicons/favicon-512.png" />
+  <link rel="apple-touch-icon" href="assets/favicons/apple-touch-icon.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#000000',
+            ink2: '#0a0a0a',
+            ink3: '#111111',
+            line: '#1c1c1c',
+            cyan: { DEFAULT: '#0FFFFF', soft: '#0FFFFF' },
+            mute: '#9aa0a6',
+            ice: '#F5F7F8',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Montserrat', 'Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background: #000;
+      color: #F5F7F8;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .display { font-family: 'Montserrat', 'Inter', sans-serif; letter-spacing: -0.02em; }
+
+    /* Cyan accent utilities */
+    .text-cyan { color: #0FFFFF; }
+    .bg-cyan { background-color: #0FFFFF; }
+    .border-cyan { border-color: #0FFFFF; }
+
+    .glow-cyan {
+      box-shadow: 0 0 0 1px rgba(15, 255, 255, 0.4),
+                  0 0 30px rgba(15, 255, 255, 0.25),
+                  0 0 60px rgba(15, 255, 255, 0.1);
+    }
+
+    .text-glow {
+      text-shadow: 0 0 24px rgba(15, 255, 255, 0.35);
+    }
+
+    /* Background grid */
+    .bg-grid {
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .bg-radial-cyan {
+      background: radial-gradient(circle at 50% 0%, rgba(15, 255, 255, 0.18), transparent 60%);
+    }
+
+    .gradient-fade-bottom {
+      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    }
+
+    .btn-primary {
+      background: #0FFFFF;
+      color: #000;
+      font-weight: 700;
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 0 0 2px rgba(15,255,255,0.35), 0 0 40px rgba(15,255,255,0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(15,255,255,0.6);
+      background: rgba(15,255,255,0.04);
+    }
+
+    .card {
+      background: linear-gradient(180deg, #0c0c0c 0%, #060606 100%);
+      border: 1px solid #1c1c1c;
+      border-radius: 18px;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    .card:hover {
+      border-color: rgba(15,255,255,0.35);
+      transform: translateY(-2px);
+    }
+
+    .module-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 3rem;
+      line-height: 1;
+      background: linear-gradient(180deg, #0FFFFF 0%, rgba(15,255,255,0.2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .check::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      margin-right: 12px;
+      flex-shrink: 0;
+      background-color: #0FFFFF;
+      mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center / contain no-repeat;
+      -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center / contain no-repeat;
+    }
+
+    /* FAQ */
+    details summary { list-style: none; cursor: pointer; }
+    details summary::-webkit-details-marker { display: none; }
+    details[open] .faq-icon { transform: rotate(45deg); }
+    .faq-icon { transition: transform .2s ease; }
+
+    /* Marquee for trust bar (optional) */
+    @keyframes scroll-x {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .marquee-track { animation: scroll-x 30s linear infinite; }
+
+    /* Sticky CTA bar (mobile) */
+    @media (max-width: 768px) {
+      .sticky-cta-mobile { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; }
+    }
+  </style>
+</head>
+<body class="bg-ink text-ice">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-black/70 border-b border-line">
+    <div class="max-w-6xl mx-auto px-5 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-2">
+        <img src="assets/images/logo-header.png" alt="Mellodia da Voz" class="h-7 md:h-8 w-auto" />
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-sm text-mute">
+        <a href="#metodo" class="hover:text-white transition">Método</a>
+        <a href="#modulos" class="hover:text-white transition">Módulos</a>
+        <a href="#professor" class="hover:text-white transition">Professor</a>
+        <a href="#investimento" class="hover:text-white transition">Investimento</a>
+        <a href="#faq" class="hover:text-white transition">FAQ</a>
+      </nav>
+      <a href="#investimento" class="hidden md:inline-flex btn-primary px-4 py-2 rounded-lg text-sm">
+        Quero o método
+      </a>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="top" class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-60 gradient-fade-bottom"></div>
+    <div class="absolute inset-0 bg-radial-cyan"></div>
+
+    <div class="relative max-w-6xl mx-auto px-5 lg:px-8 pt-20 pb-24 md:pt-28 md:pb-32">
+      <div class="flex justify-center mb-8">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan/40 bg-cyan/5 text-cyan text-xs font-medium tracking-wide uppercase">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse"></span>
+          Aprimoramento vocal profissional
+        </span>
+      </div>
+
+      <h1 class="display text-center text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05]">
+        Sua voz é seu <span class="text-cyan text-glow">ativo</span>.<br class="hidden md:block" />
+        Trate-a como tal.
+      </h1>
+
+      <p class="mt-6 text-center text-lg md:text-xl text-mute max-w-2xl mx-auto">
+        O método <strong class="text-white">Mellodia da Voz</strong> é o programa definitivo de aprimoramento vocal para
+        <strong class="text-white">oradores, podcasters e artistas</strong> que tratam a voz como instrumento de trabalho.
+      </p>
+
+      <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="#investimento" class="btn-primary inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-base">
+          Quero dominar minha voz
+          <svg class="ml-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#metodo" class="btn-secondary inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-base">
+          Ver o método
+        </a>
+      </div>
+
+      <!-- Hero stats -->
+      <div class="mt-16 grid grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto">
+        <div class="text-center">
+          <div class="display text-2xl md:text-3xl font-extrabold text-cyan">+10 anos</div>
+          <div class="text-xs md:text-sm text-mute mt-1">de experiência prática</div>
+        </div>
+        <div class="text-center border-x border-line">
+          <div class="display text-2xl md:text-3xl font-extrabold text-cyan">3 nichos</div>
+          <div class="text-xs md:text-sm text-mute mt-1">oradores · podcasters · artistas</div>
+        </div>
+        <div class="text-center">
+          <div class="display text-2xl md:text-3xl font-extrabold text-cyan">100%</div>
+          <div class="text-xs md:text-sm text-mute mt-1">online · no seu ritmo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PARA QUEM É ===================== -->
+  <section class="border-y border-line bg-ink2">
+    <div class="max-w-6xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-14">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">Para quem é</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold">
+          Se a sua voz <span class="text-cyan">trabalha por você</span>,<br class="hidden md:block" />
+          ela merece treino sério.
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Oradores -->
+        <div class="card p-7">
+          <div class="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/30 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+          </div>
+          <h3 class="display text-xl font-bold mb-2">Oradores e palestrantes</h3>
+          <p class="text-mute text-sm leading-relaxed">
+            Você precisa segurar uma sala por horas, sustentar autoridade e nunca perder a voz no meio do evento. Aprenda projeção, respiração diafragmática e resistência vocal.
+          </p>
+        </div>
+
+        <!-- Podcasters -->
+        <div class="card p-7">
+          <div class="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/30 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </div>
+          <h3 class="display text-xl font-bold mb-2">Podcasters e criadores</h3>
+          <p class="text-mute text-sm leading-relaxed">
+            Sua voz é a marca do seu canal. Domine timbre, dicção e dinâmica para gravar com presença, retenção e qualidade profissional — episódio após episódio.
+          </p>
+        </div>
+
+        <!-- Artistas -->
+        <div class="card p-7">
+          <div class="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/30 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <h3 class="display text-xl font-bold mb-2">Cantores e artistas</h3>
+          <p class="text-mute text-sm leading-relaxed">
+            Estenda sua extensão vocal, melhore afinação, ganhe potência e segurança. Técnica que respeita o seu estilo — sem padronizar, sem forçar.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== A DOR (problema) ===================== -->
+  <section class="relative">
+    <div class="max-w-4xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-12">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">O problema</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold leading-tight">
+          Você sente sua voz<br class="hidden md:block" />
+          <span class="text-cyan">trabalhar contra você?</span>
+        </h2>
+      </div>
+
+      <ul class="space-y-4 text-base md:text-lg max-w-2xl mx-auto">
+        <li class="flex items-start text-ice/90">
+          <span class="check"></span>
+          <span>Cansaço, rouquidão ou perda de voz depois de poucas horas falando.</span>
+        </li>
+        <li class="flex items-start text-ice/90">
+          <span class="check"></span>
+          <span>Voz sem presença na gravação — soa amadora mesmo com bom microfone.</span>
+        </li>
+        <li class="flex items-start text-ice/90">
+          <span class="check"></span>
+          <span>Falta de extensão, afinação instável ou medo de cantar/falar em público.</span>
+        </li>
+        <li class="flex items-start text-ice/90">
+          <span class="check"></span>
+          <span>Já tentou métodos genéricos no YouTube e não viu evolução real.</span>
+        </li>
+        <li class="flex items-start text-ice/90">
+          <span class="check"></span>
+          <span>Sabe que sua voz pode ser melhor, mas não sabe por onde começar.</span>
+        </li>
+      </ul>
+
+      <p class="text-center text-mute mt-12 max-w-xl mx-auto">
+        Voz não se conserta com motivação. Conserta-se com <strong class="text-white">técnica, repetição e diagnóstico correto</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== O MÉTODO ===================== -->
+  <section id="metodo" class="border-y border-line bg-ink2 relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-30"></div>
+    <div class="relative max-w-6xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-14">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">O método Mellodia</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold leading-tight">
+          Técnica vocal aplicada,<br class="hidden md:block" />
+          <span class="text-cyan">não promessa mágica.</span>
+        </h2>
+        <p class="text-mute mt-5 max-w-2xl mx-auto">
+          Um sistema de 4 pilares testado em alunos reais — oradores, podcasters e artistas que precisavam de resultado, não teoria.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="card p-6">
+          <div class="text-cyan display text-2xl font-extrabold mb-3">01</div>
+          <h3 class="font-bold text-lg mb-2">Diagnóstico vocal</h3>
+          <p class="text-mute text-sm leading-relaxed">Identificamos exatamente onde sua voz está limitando você — respiração, postura, ressonância ou articulação.</p>
+        </div>
+        <div class="card p-6">
+          <div class="text-cyan display text-2xl font-extrabold mb-3">02</div>
+          <h3 class="font-bold text-lg mb-2">Técnica fundamental</h3>
+          <p class="text-mute text-sm leading-relaxed">Respiração diafragmática, apoio, projeção e aquecimento vocal — a base que sustenta qualquer estilo.</p>
+        </div>
+        <div class="card p-6">
+          <div class="text-cyan display text-2xl font-extrabold mb-3">03</div>
+          <h3 class="font-bold text-lg mb-2">Aplicação real</h3>
+          <p class="text-mute text-sm leading-relaxed">Como traduzir a técnica para o seu contexto: palco, microfone, câmera ou estúdio.</p>
+        </div>
+        <div class="card p-6">
+          <div class="text-cyan display text-2xl font-extrabold mb-3">04</div>
+          <h3 class="font-bold text-lg mb-2">Saúde vocal</h3>
+          <p class="text-mute text-sm leading-relaxed">Cuidados, hidratação, descanso e rotinas que mantêm sua voz disponível todos os dias.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MÓDULOS ===================== -->
+  <section id="modulos">
+    <div class="max-w-5xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-14">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">O que você vai aprender</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold">
+          Conteúdo completo,<br class="hidden md:block" />
+          <span class="text-cyan">do diagnóstico à performance.</span>
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Módulo 1 -->
+        <div class="card p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+          <div class="module-num">01</div>
+          <div class="flex-1">
+            <h3 class="display text-xl md:text-2xl font-bold mb-2">Fundamentos da voz</h3>
+            <p class="text-mute text-sm md:text-base mb-3">Como sua voz funciona — anatomia simples, respiração diafragmática, postura e por que tudo isso muda o som que sai.</p>
+            <div class="text-xs text-mute/70">5 aulas · 1h20min</div>
+          </div>
+        </div>
+
+        <!-- Módulo 2 -->
+        <div class="card p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+          <div class="module-num">02</div>
+          <div class="flex-1">
+            <h3 class="display text-xl md:text-2xl font-bold mb-2">Aquecimento e preparo</h3>
+            <p class="text-mute text-sm md:text-base mb-3">Rotinas de 5, 10 e 20 minutos para aquecer a voz antes de qualquer atividade — sem gastar uma hora antes do palco ou da gravação.</p>
+            <div class="text-xs text-mute/70">6 aulas · 1h30min</div>
+          </div>
+        </div>
+
+        <!-- Módulo 3 -->
+        <div class="card p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+          <div class="module-num">03</div>
+          <div class="flex-1">
+            <h3 class="display text-xl md:text-2xl font-bold mb-2">Projeção e ressonância</h3>
+            <p class="text-mute text-sm md:text-base mb-3">Como ter voz que enche o ambiente sem gritar. Técnicas de ressonância, dicção e clareza para que cada palavra chegue.</p>
+            <div class="text-xs text-mute/70">7 aulas · 2h</div>
+          </div>
+        </div>
+
+        <!-- Módulo 4 -->
+        <div class="card p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+          <div class="module-num">04</div>
+          <div class="flex-1">
+            <h3 class="display text-xl md:text-2xl font-bold mb-2">Extensão vocal e afinação</h3>
+            <p class="text-mute text-sm md:text-base mb-3">Estenda seu alcance, ganhe agudos seguros e graves consistentes. Exercícios progressivos sem forçar nem machucar.</p>
+            <div class="text-xs text-mute/70">8 aulas · 2h30min</div>
+          </div>
+        </div>
+
+        <!-- Módulo 5 -->
+        <div class="card p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+          <div class="module-num">05</div>
+          <div class="flex-1">
+            <h3 class="display text-xl md:text-2xl font-bold mb-2">Voz na prática</h3>
+            <p class="text-mute text-sm md:text-base mb-3">Trilhas dedicadas: como falar em palco · como gravar para podcast · como cantar com presença. Você escolhe o seu caminho.</p>
+            <div class="text-xs text-mute/70">9 aulas · 3h</div>
+          </div>
+        </div>
+
+        <!-- Módulo 6 -->
+        <div class="card p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+          <div class="module-num">06</div>
+          <div class="flex-1">
+            <h3 class="display text-xl md:text-2xl font-bold mb-2">Saúde vocal e rotina</h3>
+            <p class="text-mute text-sm md:text-base mb-3">Hidratação, descanso, sinais de alerta, alimentação e como manter a voz disponível em alta performance todos os dias.</p>
+            <div class="text-xs text-mute/70">5 aulas · 1h15min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BÔNUS ===================== -->
+  <section class="border-y border-line bg-ink2">
+    <div class="max-w-5xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-12">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">Bônus exclusivos</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold">
+          Vai além do curso.
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="card p-7 relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-xs font-bold text-cyan/70">+R$ 297</div>
+          <div class="text-cyan text-xs font-semibold mb-2">BÔNUS 01</div>
+          <h3 class="display font-bold text-lg mb-2">Workbook de exercícios</h3>
+          <p class="text-mute text-sm leading-relaxed">PDF imprimível com 30 exercícios práticos organizados por nível.</p>
+        </div>
+        <div class="card p-7 relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-xs font-bold text-cyan/70">+R$ 397</div>
+          <div class="text-cyan text-xs font-semibold mb-2">BÔNUS 02</div>
+          <h3 class="display font-bold text-lg mb-2">Aulas ao vivo mensais</h3>
+          <p class="text-mute text-sm leading-relaxed">Sessões de tira-dúvidas e prática guiada com o professor todo mês.</p>
+        </div>
+        <div class="card p-7 relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-xs font-bold text-cyan/70">+R$ 197</div>
+          <div class="text-cyan text-xs font-semibold mb-2">BÔNUS 03</div>
+          <h3 class="display font-bold text-lg mb-2">Comunidade fechada</h3>
+          <p class="text-mute text-sm leading-relaxed">Grupo privado com outros alunos, feedbacks de gravações e suporte.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROFESSOR ===================== -->
+  <section id="professor">
+    <div class="max-w-5xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div class="order-2 md:order-1">
+          <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">Quem ensina</p>
+          <h2 class="display text-3xl md:text-5xl font-extrabold mb-5 leading-tight">
+            [Nome do<br />
+            <span class="text-cyan">Professor]</span>
+          </h2>
+          <p class="text-mute text-base md:text-lg leading-relaxed mb-4">
+            Mais de 10 anos formando vozes profissionais. Já trabalhou com [oradores conhecidos], [podcasters], [artistas] — e agora compartilha o método completo, online, no seu ritmo.
+          </p>
+          <p class="text-mute text-base md:text-lg leading-relaxed mb-6">
+            Formado em [formação], especialista em [especialização]. A Mellodia da Voz nasceu da prática, não da teoria.
+          </p>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <span class="px-3 py-1.5 rounded-lg border border-line bg-ink3 text-ice/80">10+ anos de experiência</span>
+            <span class="px-3 py-1.5 rounded-lg border border-line bg-ink3 text-ice/80">[X]+ alunos formados</span>
+            <span class="px-3 py-1.5 rounded-lg border border-line bg-ink3 text-ice/80">Especialista em técnica vocal</span>
+          </div>
+        </div>
+        <div class="order-1 md:order-2">
+          <div class="aspect-[4/5] rounded-2xl bg-gradient-to-br from-ink3 to-ink2 border border-line flex items-center justify-center text-mute/40 text-sm relative overflow-hidden">
+            <div class="absolute inset-0 bg-grid opacity-50"></div>
+            <span class="relative">[ Foto do professor ]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DEPOIMENTOS ===================== -->
+  <section class="border-y border-line bg-ink2">
+    <div class="max-w-6xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-14">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">Resultados reais</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold">
+          O que dizem quem já <span class="text-cyan">passou pelo método</span>.
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="card p-7">
+          <div class="flex gap-1 mb-4 text-cyan">★★★★★</div>
+          <p class="text-ice/90 text-sm leading-relaxed mb-5">
+            "[Depoimento sobre como o aluno superou um problema vocal específico — ex: cansaço em palestras, voz sem presença em podcast, etc. Mantém depoimento real e específico, não genérico]."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-cyan/20 border border-cyan/40 flex items-center justify-center text-cyan font-bold text-sm">[?]</div>
+            <div>
+              <div class="font-semibold text-sm">[Nome do aluno]</div>
+              <div class="text-xs text-mute">[Profissão · cidade]</div>
+            </div>
+          </div>
+        </div>
+        <div class="card p-7">
+          <div class="flex gap-1 mb-4 text-cyan">★★★★★</div>
+          <p class="text-ice/90 text-sm leading-relaxed mb-5">
+            "[Depoimento — preferir resultados mensuráveis, ex: 'Aumentei minha extensão em 4 semitons', 'Não perco mais a voz em eventos longos']."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-cyan/20 border border-cyan/40 flex items-center justify-center text-cyan font-bold text-sm">[?]</div>
+            <div>
+              <div class="font-semibold text-sm">[Nome do aluno]</div>
+              <div class="text-xs text-mute">[Profissão · cidade]</div>
+            </div>
+          </div>
+        </div>
+        <div class="card p-7">
+          <div class="flex gap-1 mb-4 text-cyan">★★★★★</div>
+          <p class="text-ice/90 text-sm leading-relaxed mb-5">
+            "[Depoimento — sempre que possível, com nome real, foto e perfil de Instagram para validação social]."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-cyan/20 border border-cyan/40 flex items-center justify-center text-cyan font-bold text-sm">[?]</div>
+            <div>
+              <div class="font-semibold text-sm">[Nome do aluno]</div>
+              <div class="text-xs text-mute">[Profissão · cidade]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GARANTIA ===================== -->
+  <section>
+    <div class="max-w-3xl mx-auto px-5 lg:px-8 py-20 md:py-24 text-center">
+      <div class="inline-flex w-20 h-20 rounded-full border border-cyan/40 bg-cyan/5 items-center justify-center mb-6 glow-cyan">
+        <svg class="w-9 h-9 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+      </div>
+      <h2 class="display text-3xl md:text-4xl font-extrabold mb-4">
+        Garantia incondicional de <span class="text-cyan">7 dias</span>
+      </h2>
+      <p class="text-mute text-lg leading-relaxed">
+        Você tem uma semana inteira para acessar o método, fazer os exercícios e sentir a diferença. Se por qualquer motivo não for pra você, pedimos reembolso integral. Sem perguntas.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== INVESTIMENTO / OFERTA ===================== -->
+  <section id="investimento" class="relative">
+    <div class="absolute inset-0 bg-radial-cyan opacity-50"></div>
+    <div class="relative max-w-4xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-12">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">Investimento</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold">
+          Sua voz, finalmente,<br class="hidden md:block" />
+          <span class="text-cyan">no nível profissional.</span>
+        </h2>
+      </div>
+
+      <div class="card p-8 md:p-12 glow-cyan relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-cyan/10 blur-3xl"></div>
+
+        <div class="relative">
+          <div class="flex items-baseline justify-center gap-3 mb-2">
+            <span class="text-mute text-lg line-through">De R$ 1.997</span>
+            <span class="text-cyan text-xs font-bold uppercase tracking-wider">Oferta de lançamento</span>
+          </div>
+          <div class="text-center mb-2">
+            <span class="text-mute">12x de</span>
+            <span class="display text-5xl md:text-6xl font-extrabold text-white mx-2">R$ 97</span>
+          </div>
+          <div class="text-center text-mute mb-8">ou R$ 997 à vista</div>
+
+          <ul class="space-y-3 max-w-md mx-auto mb-10">
+            <li class="flex items-start text-ice/90 text-sm md:text-base"><span class="check"></span>Acesso vitalício a todos os 6 módulos</li>
+            <li class="flex items-start text-ice/90 text-sm md:text-base"><span class="check"></span>40+ aulas em vídeo · 12+ horas de conteúdo</li>
+            <li class="flex items-start text-ice/90 text-sm md:text-base"><span class="check"></span>Workbook + aulas ao vivo + comunidade</li>
+            <li class="flex items-start text-ice/90 text-sm md:text-base"><span class="check"></span>Suporte direto com o professor</li>
+            <li class="flex items-start text-ice/90 text-sm md:text-base"><span class="check"></span>Garantia de 7 dias — sem perguntas</li>
+            <li class="flex items-start text-ice/90 text-sm md:text-base"><span class="check"></span>Atualizações futuras incluídas</li>
+          </ul>
+
+          <a href="#" id="cta-checkout" class="btn-primary w-full inline-flex items-center justify-center px-8 py-5 rounded-xl text-base md:text-lg">
+            Garantir minha vaga agora
+            <svg class="ml-2 w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+
+          <div class="flex items-center justify-center gap-4 mt-6 text-xs text-mute">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Pagamento seguro
+            </span>
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Acesso imediato
+            </span>
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12V8H6a2 2 0 0 1-2-2V20h16v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
+              Hotmart
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section id="faq" class="border-t border-line bg-ink2">
+    <div class="max-w-3xl mx-auto px-5 lg:px-8 py-20 md:py-28">
+      <div class="text-center mb-12">
+        <p class="text-cyan uppercase tracking-widest text-xs font-semibold mb-3">Dúvidas frequentes</p>
+        <h2 class="display text-3xl md:text-5xl font-extrabold">Perguntas comuns.</h2>
+      </div>
+
+      <div class="space-y-3">
+        <details class="card p-6 group">
+          <summary class="flex items-center justify-between gap-4">
+            <span class="font-semibold text-base md:text-lg">Preciso ter experiência prévia com canto ou voz?</span>
+            <span class="faq-icon text-cyan text-2xl leading-none">+</span>
+          </summary>
+          <p class="text-mute mt-4 text-sm md:text-base leading-relaxed">
+            Não. O método foi desenhado para começar do zero — incluindo quem nunca fez aula. Se você já tem alguma técnica, vai aprofundar. Se está começando, vai construir uma base sólida.
+          </p>
+        </details>
+
+        <details class="card p-6 group">
+          <summary class="flex items-center justify-between gap-4">
+            <span class="font-semibold text-base md:text-lg">Funciona para quem só fala (orador, podcaster) e não canta?</span>
+            <span class="faq-icon text-cyan text-2xl leading-none">+</span>
+          </summary>
+          <p class="text-mute mt-4 text-sm md:text-base leading-relaxed">
+            Sim — é exatamente para você. O método foi pensado primeiro para quem usa a voz falada profissionalmente. Há trilhas específicas para palco, microfone e câmera.
+          </p>
+        </details>
+
+        <details class="card p-6 group">
+          <summary class="flex items-center justify-between gap-4">
+            <span class="font-semibold text-base md:text-lg">Quanto tempo até ver resultado?</span>
+            <span class="faq-icon text-cyan text-2xl leading-none">+</span>
+          </summary>
+          <p class="text-mute mt-4 text-sm md:text-base leading-relaxed">
+            Diferenças perceptíveis em 7-14 dias praticando 15-20 min/dia. Resultado consolidado entre 60 e 90 dias. Voz é treino — como academia, mas mais rápido.
+          </p>
+        </details>
+
+        <details class="card p-6 group">
+          <summary class="flex items-center justify-between gap-4">
+            <span class="font-semibold text-base md:text-lg">Por quanto tempo tenho acesso?</span>
+            <span class="faq-icon text-cyan text-2xl leading-none">+</span>
+          </summary>
+          <p class="text-mute mt-4 text-sm md:text-base leading-relaxed">
+            Acesso vitalício. Compra uma vez, assiste quando quiser, revisita módulos e recebe atualizações futuras sem custo extra.
+          </p>
+        </details>
+
+        <details class="card p-6 group">
+          <summary class="flex items-center justify-between gap-4">
+            <span class="font-semibold text-base md:text-lg">Posso cancelar se não gostar?</span>
+            <span class="faq-icon text-cyan text-2xl leading-none">+</span>
+          </summary>
+          <p class="text-mute mt-4 text-sm md:text-base leading-relaxed">
+            Sim. Tem 7 dias de garantia incondicional. Se não for pra você, devolução integral, sem perguntas, sem burocracia.
+          </p>
+        </details>
+
+        <details class="card p-6 group">
+          <summary class="flex items-center justify-between gap-4">
+            <span class="font-semibold text-base md:text-lg">Como funciona o pagamento?</span>
+            <span class="faq-icon text-cyan text-2xl leading-none">+</span>
+          </summary>
+          <p class="text-mute mt-4 text-sm md:text-base leading-relaxed">
+            Via Hotmart — cartão de crédito (até 12x), Pix ou boleto. Acesso liberado em até 5 minutos após confirmação do pagamento.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA FINAL ===================== -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-radial-cyan"></div>
+    <div class="relative max-w-3xl mx-auto px-5 lg:px-8 py-20 md:py-28 text-center">
+      <h2 class="display text-3xl md:text-5xl font-extrabold leading-tight mb-5">
+        Daqui a 90 dias, sua voz pode estar<br class="hidden md:block" />
+        <span class="text-cyan">em outro nível</span> — ou exatamente igual.
+      </h2>
+      <p class="text-mute text-lg mb-10 max-w-xl mx-auto">
+        A diferença é começar.
+      </p>
+      <a href="#investimento" class="btn-primary inline-flex items-center justify-center px-8 py-5 rounded-xl text-lg">
+        Quero começar agora
+        <svg class="ml-2 w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="border-t border-line bg-black">
+    <div class="max-w-6xl mx-auto px-5 lg:px-8 py-12">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div>
+          <img src="assets/images/logo-header.png" alt="Mellodia da Voz" class="h-7 w-auto mb-3" />
+          <p class="text-mute text-sm max-w-md">
+            Aprimoramento vocal para quem trata a voz como ativo profissional.
+          </p>
+        </div>
+        <div class="flex flex-col md:items-end gap-2 text-sm text-mute">
+          <a href="mailto:contato@mellodiadavoz.com.br" class="hover:text-white transition">contato@mellodiadavoz.com.br</a>
+          <div class="flex gap-4">
+            <a href="#" class="hover:text-cyan transition">Instagram</a>
+            <a href="#" class="hover:text-cyan transition">YouTube</a>
+            <a href="#" class="hover:text-cyan transition">TikTok</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-line mt-10 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-mute/70">
+        <span>© 2026 Mellodia da Voz. Todos os direitos reservados.</span>
+        <div class="flex gap-5">
+          <a href="#" class="hover:text-white transition">Termos de uso</a>
+          <a href="#" class="hover:text-white transition">Política de privacidade</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== STICKY CTA MOBILE ===================== -->
+  <div class="sticky-cta-mobile md:hidden bg-black/90 backdrop-blur-md border-t border-line p-3">
+    <a href="#investimento" class="btn-primary w-full inline-flex items-center justify-center px-5 py-3.5 rounded-xl text-sm">
+      Quero o método agora
+    </a>
+  </div>
+
+  <script>
+    // Scroll suave já vem do CSS scroll-behavior. Aqui só preparamos analytics.
+    // TODO: substituir href do #cta-checkout pelo link da Hotmart real.
+    // Ex: document.getElementById('cta-checkout').href = 'https://pay.hotmart.com/SEU-PRODUTO';
+  </script>
+
+</body>
+</html>
