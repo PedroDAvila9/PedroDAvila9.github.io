@@ -206,34 +206,57 @@
 
   <script>
   (function(){
-    // ---------- Pitch detection (autocorrelation, YIN-like) ----------
+    // ---------- Pitch detection (YIN) ----------
+    // YIN é resistente a "octave error" (a autocorrelação pura tende a
+    // reportar a frequência uma oitava abaixo, especialmente em mics de celular).
+    var FMIN = 65, FMAX = 1100, YIN_THRESHOLD = 0.15;
     function autoCorrelate(buf, sampleRate){
       var SIZE = buf.length, rms = 0;
       for (var i=0;i<SIZE;i++){ var v=buf[i]; rms+=v*v; }
       rms = Math.sqrt(rms/SIZE);
-      if (rms < 0.012) return -1; // sinal fraco demais
+      if (rms < 0.01) return -1; // sinal fraco demais
 
-      var r1=0, r2=SIZE-1, thres=0.2;
-      for (var i=0;i<SIZE/2;i++){ if (Math.abs(buf[i])<thres){ r1=i; break; } }
-      for (var i=1;i<SIZE/2;i++){ if (Math.abs(buf[SIZE-i])<thres){ r2=SIZE-i; break; } }
-      var b = buf.slice(r1, r2);
-      SIZE = b.length;
+      var tauMax = Math.min(Math.floor(SIZE/2), Math.floor(sampleRate/FMIN));
+      var tauMin = Math.max(2, Math.floor(sampleRate/FMAX));
+      var yin = new Float32Array(tauMax);
 
-      var c = new Float32Array(SIZE);
-      for (var i=0;i<SIZE;i++){ for (var j=0;j<SIZE-i;j++){ c[i] += b[j]*b[j+i]; } }
-
-      var d=0; while (d<SIZE-1 && c[d]>c[d+1]) d++;
-      var maxval=-1, maxpos=-1;
-      for (var i=d;i<SIZE;i++){ if (c[i]>maxval){ maxval=c[i]; maxpos=i; } }
-      var T0 = maxpos;
-      if (T0<=0) return -1;
-
-      var x1=c[T0-1]||0, x2=c[T0], x3=c[T0+1]||0;
-      var a=(x1+x3-2*x2)/2, bb=(x3-x1)/2;
-      if (a) T0 = T0 - bb/(2*a);
-
-      var freq = sampleRate/T0;
-      if (freq < 65 || freq > 1200) return -1; // faixa vocal humana plausível
+      // 1) difference function
+      for (var tau=1; tau<tauMax; tau++){
+        var sum=0;
+        for (var i=0;i<tauMax;i++){ var d = buf[i]-buf[i+tau]; sum += d*d; }
+        yin[tau]=sum;
+      }
+      // 2) cumulative mean normalized difference
+      yin[0]=1;
+      var running=0;
+      for (var tau=1; tau<tauMax; tau++){ running += yin[tau]; yin[tau] = running>0 ? yin[tau]*tau/running : 1; }
+      // 3) absolute threshold — primeiro vale abaixo do limiar (= fundamental, não sub-harmônico)
+      var tauEst=-1;
+      for (var tau=tauMin; tau<tauMax; tau++){
+        if (yin[tau] < YIN_THRESHOLD){
+          while (tau+1<tauMax && yin[tau+1]<yin[tau]) tau++;
+          tauEst=tau; break;
+        }
+      }
+      if (tauEst===-1){
+        // fallback: mínimo global, mas só se razoavelmente confiável
+        var minVal=Infinity, minTau=-1;
+        for (var tau=tauMin; tau<tauMax; tau++){ if (yin[tau]<minVal){ minVal=yin[tau]; minTau=tau; } }
+        if (minVal > 0.5) return -1;
+        tauEst = minTau;
+      }
+      // 4) interpolação parabólica
+      var x0 = tauEst>tauMin ? tauEst-1 : tauEst;
+      var x2 = tauEst+1<tauMax ? tauEst+1 : tauEst;
+      var betterTau;
+      if (x0===tauEst) betterTau = yin[tauEst]<=yin[x2] ? tauEst : x2;
+      else if (x2===tauEst) betterTau = yin[tauEst]<=yin[x0] ? tauEst : x0;
+      else {
+        var s0=yin[x0], s1=yin[tauEst], s2=yin[x2], denom=(2*s1-s2-s0);
+        betterTau = denom ? tauEst + (s2-s0)/(2*denom) : tauEst;
+      }
+      var freq = sampleRate/betterTau;
+      if (freq < FMIN || freq > FMAX) return -1;
       return freq;
     }
 
@@ -356,14 +379,26 @@
     }
 
     async function initMic(){
-      try {
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false } });
-      } catch(e){
-        els.micWarn.textContent = 'Não consegui acessar o microfone. Verifique a permissão do navegador e tente de novo.';
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        els.micWarn.textContent = 'Seu navegador não permite acesso ao microfone. Abra em HTTPS no Chrome ou Safari.';
         els.micWarn.classList.add('text-red-400');
         return false;
       }
+      // Desliga o processamento do mic (AGC/noise suppression distorce a onda e atrapalha a detecção).
+      // Mobile pode rejeitar constraints específicas — por isso o fallback para audio:true.
+      var constraints = { audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false, channelCount:1 } };
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch(e){
+        try { micStream = await navigator.mediaDevices.getUserMedia({ audio:true }); }
+        catch(e2){
+          els.micWarn.textContent = 'Não consegui acessar o microfone. Toque em “Permitir” quando o navegador pedir e tente de novo.';
+          els.micWarn.classList.add('text-red-400');
+          return false;
+        }
+      }
       audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended'){ try { await audioCtx.resume(); } catch(e){} } // iOS/Safari exige resume após gesto
       sampleRate = audioCtx.sampleRate;
       var src = audioCtx.createMediaStreamSource(micStream);
       analyser = audioCtx.createAnalyser();
