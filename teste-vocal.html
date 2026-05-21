@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+
+  <title>Teste Vocal Mellodia — Descubra seu perfil vocal em 1 minuto</title>
+  <meta name="description" content="Descubra sua classificação vocal (soprano, mezzo, contralto, tenor, barítono, baixo) e sua extensão. Análise gratuita da sua voz, direto no navegador, sem instalar nada." />
+
+  <meta property="og:title" content="Teste Vocal Mellodia — Qual é o seu perfil vocal?" />
+  <meta property="og:description" content="Análise gratuita da sua voz: classificação vocal e extensão, direto no navegador." />
+  <meta property="og:image" content="assets/images/og-image.png" />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicons/favicon-32.png" />
+  <link rel="apple-touch-icon" href="assets/favicons/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { ink:'#000', ink2:'#0a0a0a', ink3:'#111', line:'#1c1c1c', cyan:{DEFAULT:'#0FFFFF'}, mute:'#9aa0a6', ice:'#F5F7F8' },
+        fontFamily: { sans:['Inter','system-ui','sans-serif'], display:['Montserrat','Inter','sans-serif'] },
+      }},
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background:#000; color:#F5F7F8; font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+    .display { font-family:'Montserrat','Inter',sans-serif; letter-spacing:-0.02em; }
+    .text-cyan{color:#0FFFFF;} .bg-cyan{background:#0FFFFF;} .border-cyan{border-color:#0FFFFF;}
+    .text-glow{text-shadow:0 0 24px rgba(15,255,255,.35);}
+    .glow-cyan{box-shadow:0 0 0 1px rgba(15,255,255,.4),0 0 30px rgba(15,255,255,.25),0 0 60px rgba(15,255,255,.1);}
+    .bg-grid{background-image:linear-gradient(to right,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.04) 1px,transparent 1px);background-size:48px 48px;}
+    .bg-radial-cyan{background:radial-gradient(circle at 50% 0%,rgba(15,255,255,.18),transparent 60%);}
+    .card{background:linear-gradient(180deg,#0c0c0c 0%,#060606 100%);border:1px solid #1c1c1c;border-radius:18px;}
+    .btn-primary{background:#0FFFFF;color:#000;font-weight:700;transition:transform .15s,box-shadow .15s,filter .15s;}
+    .btn-primary:hover{filter:brightness(1.08);box-shadow:0 0 0 2px rgba(15,255,255,.35),0 0 40px rgba(15,255,255,.45);transform:translateY(-1px);}
+    .btn-primary:disabled{opacity:.4;cursor:not-allowed;filter:none;box-shadow:none;transform:none;}
+    .btn-secondary{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.2);transition:border-color .15s,background .15s;}
+    .btn-secondary:hover{border-color:rgba(15,255,255,.6);background:rgba(15,255,255,.04);}
+
+    /* Pitch meter ring */
+    .ring-bg{stroke:rgba(255,255,255,.08);} .ring-fg{stroke:#0FFFFF;transition:stroke-dashoffset .1s linear;}
+
+    /* Live note display */
+    .note-live{font-variant-numeric:tabular-nums;}
+
+    /* Mic level bars */
+    .level-track{display:flex;gap:3px;align-items:flex-end;height:64px;justify-content:center;}
+    .level-track span{width:5px;background:#0FFFFF;border-radius:2px;height:6px;opacity:.3;transition:height .08s ease,opacity .08s ease;}
+
+    /* step states */
+    [data-step]{display:none;}
+    [data-step].active{display:block;}
+
+    .pulse-rec{animation:pulse-rec 1.1s ease-in-out infinite;}
+    @keyframes pulse-rec{0%,100%{opacity:1;}50%{opacity:.35;}}
+  </style>
+</head>
+<body class="bg-ink text-ice">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-black/70 border-b border-line">
+    <div class="max-w-4xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2">
+        <img src="assets/images/logo-header.png" alt="Mellodia da Voz" class="h-7 w-auto" />
+      </a>
+      <a href="index.html#investimento" class="btn-secondary px-4 py-2 rounded-lg text-sm">Conhecer o curso</a>
+    </div>
+  </header>
+
+  <!-- HERO + TESTE -->
+  <section class="relative overflow-hidden min-h-[calc(100vh-4rem)] flex items-center">
+    <div class="absolute inset-0 bg-grid opacity-50"></div>
+    <div class="absolute inset-0 bg-radial-cyan"></div>
+
+    <div class="relative max-w-2xl mx-auto px-5 py-16 w-full">
+      <div class="text-center mb-8">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan/40 bg-cyan/5 text-cyan text-xs font-medium tracking-wide uppercase">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse"></span>
+          Teste vocal gratuito
+        </span>
+        <h1 class="display text-3xl md:text-5xl font-extrabold leading-tight mt-5">
+          Qual é o seu <span class="text-cyan text-glow">perfil vocal?</span>
+        </h1>
+        <p class="text-mute mt-4 max-w-lg mx-auto">
+          Em 1 minuto, descubra sua classificação vocal e sua extensão — analisada em tempo real pelo seu navegador. Nada é gravado nem enviado.
+        </p>
+      </div>
+
+      <!-- ===== CARD DO TESTE ===== -->
+      <div class="card p-6 md:p-8 glow-cyan">
+
+        <!-- STEP: intro -->
+        <div data-step="intro" class="active text-center">
+          <div class="w-16 h-16 rounded-full bg-cyan/10 border border-cyan/30 flex items-center justify-center mx-auto mb-5">
+            <svg class="w-8 h-8 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </div>
+          <h2 class="display text-xl font-bold mb-2">Como funciona</h2>
+          <ul class="text-sm text-mute text-left max-w-sm mx-auto space-y-2 mb-6">
+            <li>1. Você vai cantar a nota <strong class="text-white">mais grave</strong> que conseguir sustentar.</li>
+            <li>2. Depois, a nota <strong class="text-white">mais aguda</strong>.</li>
+            <li>3. O teste mede sua extensão e estima sua classificação vocal.</li>
+          </ul>
+          <p class="text-xs text-mute/70 mb-6">Use fone de ouvido e um ambiente silencioso para mais precisão. Funciona melhor cantando a vogal <strong class="text-ice">“ah”</strong>.</p>
+
+          <div class="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5">
+            <div class="flex items-center gap-2 text-sm">
+              <span class="text-mute">Sua voz:</span>
+              <button data-sex="f" class="sex-btn btn-secondary px-3 py-1.5 rounded-lg text-sm">Feminina</button>
+              <button data-sex="m" class="sex-btn btn-secondary px-3 py-1.5 rounded-lg text-sm">Masculina</button>
+            </div>
+          </div>
+
+          <button id="btn-start" class="btn-primary w-full inline-flex items-center justify-center px-6 py-4 rounded-xl text-base" disabled>
+            Selecione o tipo de voz acima
+          </button>
+          <p id="mic-warn" class="text-xs text-mute/60 mt-3"></p>
+        </div>
+
+        <!-- STEP: capture (reused for grave + agudo) -->
+        <div data-step="capture" class="text-center">
+          <div class="text-cyan uppercase tracking-widest text-xs font-semibold mb-2" id="cap-label">Nota mais grave</div>
+          <h2 class="display text-2xl font-bold mb-1" id="cap-instruction">Cante a nota mais GRAVE que conseguir</h2>
+          <p class="text-mute text-sm mb-6" id="cap-hint">Segure a vogal “ah” o mais grave e estável possível.</p>
+
+          <!-- live note ring -->
+          <div class="relative w-44 h-44 mx-auto mb-4">
+            <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
+              <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/>
+              <circle id="ring-fg" class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <div class="note-live display text-4xl font-extrabold text-white" id="note-display">—</div>
+              <div class="text-xs text-mute mt-1" id="freq-display">aguardando voz…</div>
+            </div>
+          </div>
+
+          <div class="level-track mb-6" id="level-track"></div>
+
+          <div class="flex items-center justify-center gap-2 text-sm mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500 pulse-rec" id="rec-dot" style="display:none"></span>
+            <span class="text-mute" id="cap-status">Prepare-se…</span>
+          </div>
+
+          <button id="btn-capture" class="btn-primary w-full inline-flex items-center justify-center px-6 py-4 rounded-xl text-base mt-3">
+            Começar a gravar
+          </button>
+        </div>
+
+        <!-- STEP: processing -->
+        <div data-step="processing" class="text-center py-10">
+          <div class="w-12 h-12 rounded-full border-2 border-cyan/30 border-t-cyan animate-spin mx-auto mb-5"></div>
+          <p class="text-mute">Analisando sua voz…</p>
+        </div>
+
+        <!-- STEP: result -->
+        <div data-step="result" class="text-center">
+          <div class="text-cyan uppercase tracking-widest text-xs font-semibold mb-2">Seu perfil vocal</div>
+          <h2 class="display text-4xl md:text-5xl font-extrabold text-cyan text-glow mb-2" id="res-class">—</h2>
+          <p class="text-mute mb-6" id="res-tagline"></p>
+
+          <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="card p-4">
+              <div class="text-xs text-mute mb-1">Nota grave</div>
+              <div class="display text-xl font-bold" id="res-low">—</div>
+            </div>
+            <div class="card p-4">
+              <div class="text-xs text-mute mb-1">Nota aguda</div>
+              <div class="display text-xl font-bold" id="res-high">—</div>
+            </div>
+            <div class="card p-4">
+              <div class="text-xs text-mute mb-1">Extensão</div>
+              <div class="display text-xl font-bold" id="res-range">—</div>
+            </div>
+          </div>
+
+          <div class="card p-5 text-left mb-6">
+            <div class="text-cyan text-xs font-semibold uppercase tracking-widest mb-2">Por onde começar</div>
+            <p class="text-sm text-ice/90" id="res-advice"></p>
+          </div>
+
+          <a href="index.html#investimento" class="btn-primary w-full inline-flex items-center justify-center px-6 py-4 rounded-xl text-base mb-3">
+            Quero treinar essa voz
+            <svg class="ml-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <button id="btn-restart" class="btn-secondary w-full inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm">
+            Refazer o teste
+          </button>
+
+          <p class="text-[11px] text-mute/50 mt-5 leading-relaxed">
+            Estimativa baseada na extensão captada. Classificação vocal definitiva exige avaliação de tessitura, peso e timbre por um professor — este teste é um ponto de partida, não um diagnóstico.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+  (function(){
+    // ---------- Pitch detection (autocorrelation, YIN-like) ----------
+    function autoCorrelate(buf, sampleRate){
+      var SIZE = buf.length, rms = 0;
+      for (var i=0;i<SIZE;i++){ var v=buf[i]; rms+=v*v; }
+      rms = Math.sqrt(rms/SIZE);
+      if (rms < 0.012) return -1; // sinal fraco demais
+
+      var r1=0, r2=SIZE-1, thres=0.2;
+      for (var i=0;i<SIZE/2;i++){ if (Math.abs(buf[i])<thres){ r1=i; break; } }
+      for (var i=1;i<SIZE/2;i++){ if (Math.abs(buf[SIZE-i])<thres){ r2=SIZE-i; break; } }
+      var b = buf.slice(r1, r2);
+      SIZE = b.length;
+
+      var c = new Float32Array(SIZE);
+      for (var i=0;i<SIZE;i++){ for (var j=0;j<SIZE-i;j++){ c[i] += b[j]*b[j+i]; } }
+
+      var d=0; while (d<SIZE-1 && c[d]>c[d+1]) d++;
+      var maxval=-1, maxpos=-1;
+      for (var i=d;i<SIZE;i++){ if (c[i]>maxval){ maxval=c[i]; maxpos=i; } }
+      var T0 = maxpos;
+      if (T0<=0) return -1;
+
+      var x1=c[T0-1]||0, x2=c[T0], x3=c[T0+1]||0;
+      var a=(x1+x3-2*x2)/2, bb=(x3-x1)/2;
+      if (a) T0 = T0 - bb/(2*a);
+
+      var freq = sampleRate/T0;
+      if (freq < 65 || freq > 1200) return -1; // faixa vocal humana plausível
+      return freq;
+    }
+
+    function freqToMidi(f){ return 12*(Math.log(f/440)/Math.log(2))+69; }
+    var NOTE_NAMES = ['Dó','Dó#','Ré','Ré#','Mi','Fá','Fá#','Sol','Sol#','Lá','Lá#','Si'];
+    var NOTE_ASCII = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    function midiToName(m){ m=Math.round(m); return NOTE_NAMES[(m%12+12)%12] + (Math.floor(m/12)-1); }
+    function midiToAscii(m){ m=Math.round(m); return NOTE_ASCII[(m%12+12)%12] + (Math.floor(m/12)-1); }
+
+    // ---------- Voice classification ----------
+    // Centros de tessitura (MIDI) por naipe
+    // center = ponto médio da tessitura de referência (em MIDI)
+    var FACHS = {
+      f: [
+        { name:'Contralto', center:65, tag:'A voz feminina mais grave e encorpada.' },      // F3(53)–F5(77)
+        { name:'Mezzo-soprano', center:69, tag:'Voz feminina central, versátil e cheia.' }, // A3(57)–A5(81)
+        { name:'Soprano', center:72, tag:'A voz feminina mais aguda e brilhante.' },        // C4(60)–C6(84)
+      ],
+      m: [
+        { name:'Baixo', center:52, tag:'A voz masculina mais grave e profunda.' },          // E2(40)–E4(64)
+        { name:'Barítono', center:57, tag:'Voz masculina central, a mais comum.' },          // A2(45)–A4(69)
+        { name:'Tenor', center:60, tag:'A voz masculina mais aguda e penetrante.' },         // C3(48)–C5(72)
+      ]
+    };
+
+    function classify(lowMidi, highMidi, sex){
+      var center = (lowMidi + highMidi)/2;
+      var options = FACHS[sex];
+      var best = options[0], bestDist = Infinity;
+      options.forEach(function(o){
+        var dist = Math.abs(o.center - center);
+        if (dist < bestDist){ bestDist = dist; best = o; }
+      });
+      return best;
+    }
+
+    function adviceFor(rangeSemis){
+      if (rangeSemis < 12) return 'Sua extensão atual é curta — isso é normal no início e melhora rápido. Comece pelo Módulo 2 (apoio e vocalize) para ganhar alcance sem forçar.';
+      if (rangeSemis < 19) return 'Você já tem uma extensão de trabalho. O próximo salto está na passagem entre registros — foque no Módulo 4 (peito, mix e cabeça) para destravar os agudos.';
+      return 'Extensão acima da média! Agora o jogo é controle e cor: Módulos 5 e 6 (belting saudável, vibrato, ornamentos e melismas) levam sua voz ao nível avançado.';
+    }
+
+    // ---------- State ----------
+    var state = { sex:null, low:null, high:null, phase:'low' };
+    var audioCtx, analyser, micStream, rafId, buf, sampleRate;
+    var collecting = false, collected = [];
+
+    var els = {
+      steps: {},
+      btnStart: document.getElementById('btn-start'),
+      micWarn: document.getElementById('mic-warn'),
+      capLabel: document.getElementById('cap-label'),
+      capInstr: document.getElementById('cap-instruction'),
+      capHint: document.getElementById('cap-hint'),
+      capStatus: document.getElementById('cap-status'),
+      btnCapture: document.getElementById('btn-capture'),
+      recDot: document.getElementById('rec-dot'),
+      noteDisp: document.getElementById('note-display'),
+      freqDisp: document.getElementById('freq-display'),
+      ring: document.getElementById('ring-fg'),
+      level: document.getElementById('level-track'),
+      btnRestart: document.getElementById('btn-restart'),
+    };
+    document.querySelectorAll('[data-step]').forEach(function(s){ els.steps[s.getAttribute('data-step')] = s; });
+
+    // build level bars
+    for (var i=0;i<16;i++){ var s=document.createElement('span'); els.level.appendChild(s); }
+    var levelBars = els.level.querySelectorAll('span');
+
+    function show(step){
+      Object.keys(els.steps).forEach(function(k){ els.steps[k].classList.toggle('active', k===step); });
+    }
+
+    // sex selection
+    document.querySelectorAll('.sex-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('.sex-btn').forEach(function(x){ x.classList.remove('btn-primary'); x.classList.add('btn-secondary'); });
+        b.classList.add('btn-primary'); b.classList.remove('btn-secondary');
+        state.sex = b.getAttribute('data-sex');
+        els.btnStart.disabled = false;
+        els.btnStart.textContent = 'Iniciar teste';
+      });
+    });
+
+    var RING_LEN = 326.7;
+    var RING_MIN = 65, RING_MAX = 1100; // map freq -> ring (log)
+    function updateRing(freq){
+      if (freq<=0){ els.ring.style.strokeDashoffset = RING_LEN; return; }
+      var t = (Math.log(freq)-Math.log(RING_MIN))/(Math.log(RING_MAX)-Math.log(RING_MIN));
+      t = Math.max(0, Math.min(1, t));
+      els.ring.style.strokeDashoffset = RING_LEN*(1-t);
+    }
+
+    function loop(){
+      analyser.getFloatTimeDomainData(buf);
+      var freq = autoCorrelate(buf, sampleRate);
+
+      // level meter (rms-based, quick)
+      var rms=0; for (var i=0;i<buf.length;i++){ rms+=buf[i]*buf[i]; } rms=Math.sqrt(rms/buf.length);
+      var lv = Math.min(1, rms*6);
+      for (var i=0;i<levelBars.length;i++){
+        var center = Math.abs(i-(levelBars.length-1)/2)/((levelBars.length-1)/2);
+        var h = 6 + lv*58*(1-center*0.6);
+        levelBars[i].style.height = h.toFixed(0)+'px';
+        levelBars[i].style.opacity = (0.3+lv*0.7).toFixed(2);
+      }
+
+      if (freq>0){
+        var midi = freqToMidi(freq);
+        els.noteDisp.textContent = midiToName(midi);
+        els.freqDisp.textContent = Math.round(freq)+' Hz · '+midiToAscii(midi);
+        updateRing(freq);
+        if (collecting) collected.push(midi);
+      } else {
+        els.noteDisp.textContent = '—';
+        els.freqDisp.textContent = collecting ? 'cante mais firme…' : 'aguardando voz…';
+        updateRing(0);
+      }
+      rafId = requestAnimationFrame(loop);
+    }
+
+    async function initMic(){
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false } });
+      } catch(e){
+        els.micWarn.textContent = 'Não consegui acessar o microfone. Verifique a permissão do navegador e tente de novo.';
+        els.micWarn.classList.add('text-red-400');
+        return false;
+      }
+      audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      sampleRate = audioCtx.sampleRate;
+      var src = audioCtx.createMediaStreamSource(micStream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 2048;
+      buf = new Float32Array(analyser.fftSize);
+      src.connect(analyser);
+      loop();
+      return true;
+    }
+
+    function startCapturePhase(phase){
+      state.phase = phase;
+      collected = [];
+      collecting = false;
+      var isLow = phase==='low';
+      els.capLabel.textContent = isLow ? 'Etapa 1 de 2 · Nota mais grave' : 'Etapa 2 de 2 · Nota mais aguda';
+      els.capInstr.textContent = isLow ? 'Cante a nota mais GRAVE que conseguir' : 'Cante a nota mais AGUDA que conseguir';
+      els.capHint.textContent = isLow ? 'Segure a vogal “ah” o mais grave e estável possível.' : 'Suba até o seu limite confortável e segure o “ah”.';
+      els.capStatus.textContent = 'Quando estiver pronto, toque em gravar.';
+      els.recDot.style.display = 'none';
+      els.btnCapture.textContent = 'Começar a gravar';
+      els.btnCapture.disabled = false;
+      show('capture');
+    }
+
+    function runCountdownAndRecord(){
+      els.btnCapture.disabled = true;
+      var pre = 3;
+      els.capStatus.textContent = 'Prepare-se: '+pre;
+      var preTimer = setInterval(function(){
+        pre--;
+        if (pre>0){ els.capStatus.textContent = 'Prepare-se: '+pre; return; }
+        clearInterval(preTimer);
+        // start recording window
+        collected = [];
+        collecting = true;
+        els.recDot.style.display = 'inline-block';
+        var dur = 4, left = dur;
+        els.capStatus.textContent = 'Gravando… cante agora! ('+left+'s)';
+        var recTimer = setInterval(function(){
+          left--;
+          if (left>0){ els.capStatus.textContent = 'Gravando… cante agora! ('+left+'s)'; return; }
+          clearInterval(recTimer);
+          collecting = false;
+          els.recDot.style.display = 'none';
+          finishPhase();
+        }, 1000);
+      }, 1000);
+    }
+
+    function robustExtreme(arr, takeLow){
+      if (!arr.length) return null;
+      var sorted = arr.slice().sort(function(a,b){ return a-b; });
+      // percentil 10 (grave) ou 90 (agudo) p/ descartar outliers/cliques
+      var idx = takeLow ? Math.floor(sorted.length*0.10) : Math.floor(sorted.length*0.90);
+      idx = Math.max(0, Math.min(sorted.length-1, idx));
+      return sorted[idx];
+    }
+
+    function finishPhase(){
+      var val = robustExtreme(collected, state.phase==='low');
+      if (val==null){
+        els.capStatus.textContent = 'Não captei sua voz. Toque em gravar e cante mais firme.';
+        els.btnCapture.disabled = false;
+        els.btnCapture.textContent = 'Tentar de novo';
+        return;
+      }
+      if (state.phase==='low'){
+        state.low = val;
+        startCapturePhase('high');
+      } else {
+        state.high = val;
+        // sanity: garante low<high
+        if (state.high < state.low){ var t=state.low; state.low=state.high; state.high=t; }
+        computeResult();
+      }
+    }
+
+    function computeResult(){
+      show('processing');
+      setTimeout(function(){
+        var fach = classify(state.low, state.high, state.sex);
+        var rangeSemis = Math.round(state.high - state.low);
+        var oct = Math.floor(rangeSemis/12), semi = rangeSemis%12;
+        document.getElementById('res-class').textContent = fach.name;
+        document.getElementById('res-tagline').textContent = fach.tag;
+        document.getElementById('res-low').textContent = midiToName(state.low);
+        document.getElementById('res-high').textContent = midiToName(state.high);
+        document.getElementById('res-range').textContent = (oct? oct+' oitava'+(oct>1?'s':'') : '') + (oct&&semi?' ':'') + (semi? semi+' st':'') || rangeSemis+' st';
+        document.getElementById('res-advice').textContent = adviceFor(rangeSemis);
+        show('result');
+      }, 900);
+    }
+
+    els.btnStart.addEventListener('click', async function(){
+      els.btnStart.disabled = true;
+      els.btnStart.textContent = 'Pedindo acesso ao microfone…';
+      var ok = await initMic();
+      if (!ok){ els.btnStart.disabled = false; els.btnStart.textContent = 'Tentar de novo'; return; }
+      startCapturePhase('low');
+    });
+
+    els.btnCapture.addEventListener('click', runCountdownAndRecord);
+
+    els.btnRestart.addEventListener('click', function(){
+      state.low = null; state.high = null; state.phase = 'low';
+      startCapturePhase('low');
+    });
+  })();
+  </script>
+
+</body>
+</html>
