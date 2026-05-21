@@ -210,11 +210,15 @@
     // YIN é resistente a "octave error" (a autocorrelação pura tende a
     // reportar a frequência uma oitava abaixo, especialmente em mics de celular).
     var FMIN = 65, FMAX = 1100, YIN_THRESHOLD = 0.15;
-    function autoCorrelate(buf, sampleRate){
-      var SIZE = buf.length, rms = 0;
-      for (var i=0;i<SIZE;i++){ var v=buf[i]; rms+=v*v; }
+    function autoCorrelate(rawBuf, sampleRate){
+      var SIZE = rawBuf.length, rms = 0, peak = 0;
+      for (var i=0;i<SIZE;i++){ var v=rawBuf[i]; rms+=v*v; var a=Math.abs(v); if(a>peak)peak=a; }
       rms = Math.sqrt(rms/SIZE);
-      if (rms < 0.01) return -1; // sinal fraco demais
+      if (rms < 0.004 || peak < 0.008) return -1; // silêncio / sinal fraco demais
+
+      // normaliza pelo pico — robustez a amplitude baixa (mic mobile)
+      var buf = new Float32Array(SIZE), inv = 1/peak;
+      for (var i=0;i<SIZE;i++){ buf[i] = rawBuf[i]*inv; }
 
       var tauMax = Math.min(Math.floor(SIZE/2), Math.floor(sampleRate/FMIN));
       var tauMin = Math.max(2, Math.floor(sampleRate/FMAX));
@@ -356,7 +360,7 @@
 
       // level meter (rms-based, quick)
       var rms=0; for (var i=0;i<buf.length;i++){ rms+=buf[i]*buf[i]; } rms=Math.sqrt(rms/buf.length);
-      var lv = Math.min(1, rms*6);
+      var lv = Math.min(1, rms*9);
       for (var i=0;i<levelBars.length;i++){
         var center = Math.abs(i-(levelBars.length-1)/2)/((levelBars.length-1)/2);
         var h = 6 + lv*58*(1-center*0.6);
@@ -384,9 +388,9 @@
         els.micWarn.classList.add('text-red-400');
         return false;
       }
-      // Desliga o processamento do mic (AGC/noise suppression distorce a onda e atrapalha a detecção).
-      // Mobile pode rejeitar constraints específicas — por isso o fallback para audio:true.
-      var constraints = { audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false, channelCount:1 } };
+      // noiseSuppression OFF (distorce a forma da onda), mas AGC ON:
+      // no mobile o ganho do mic depende dele — sem AGC o sinal chega fraco demais pra detectar.
+      var constraints = { audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:true, channelCount:1 } };
       try {
         micStream = await navigator.mediaDevices.getUserMedia(constraints);
       } catch(e){
@@ -401,10 +405,14 @@
       if (audioCtx.state === 'suspended'){ try { await audioCtx.resume(); } catch(e){} } // iOS/Safari exige resume após gesto
       sampleRate = audioCtx.sampleRate;
       var src = audioCtx.createMediaStreamSource(micStream);
+      // GainNode amplifica por software — resolve sinal fraco de mic mobile sem distorcer a onda.
+      var gain = audioCtx.createGain();
+      gain.gain.value = 3.5;
       analyser = audioCtx.createAnalyser();
       analyser.fftSize = 2048;
       buf = new Float32Array(analyser.fftSize);
-      src.connect(analyser);
+      src.connect(gain);
+      gain.connect(analyser);
       loop();
       return true;
     }
